@@ -36,25 +36,53 @@ describe Itertools do
     end
   end
 
+  def begins(fiber, expected)
+    for e in expected
+      fiber.resume.should == e
+    end
+  end
+
+  def ended(fiber)
+    lambda {fiber.resume}.should raise_error
+  end
 
   describe "#cycle" do
-    shared_examples "cycle" do
+    let(:cycle) { Itertools.cycle(params) }
+    context "with an array" do
+      let(:params) { [0,1,2] }
       it "loops" do
-        cycle = Itertools.cycle(param)
-        results.each do |result|
-          cycle.resume.should == result
-        end
+        begins(cycle, [0,1,2,0,1,2,0,1,2])
       end
     end
-    context "with an array" do
-      let(:param) { [0,1,2] }
-      let(:results) { [0,1,2,0,1,2,0,1,2] }
-      it_behaves_like "cycle"
-    end
     context "with a ruby string" do
-      let(:param) { 'whool' }
+      let(:params) { 'whool' }
       let(:results) { ['w','h','o','o','l','w','h','o','o','l','w']}
-      it_behaves_like "cycle"
+      it "loops" do
+        begins(cycle, results)
+      end
+    end
+  end
+
+  describe "#repeat" do
+    let(:repeat) { Itertools.repeat(*params) }
+    context "with a limit" do
+      let(:params) { [0, 5] }
+      it "repeats the proper amount of times" do
+        begins(repeat, [0] * 5)
+        ended(repeat)
+      end
+    end
+    context "zero limit" do
+      let(:params) { [0, 0] }
+      it "yields nothing" do
+        ended(repeat)
+      end
+    end
+    context "without a limit" do
+      let(:params) { [0] }
+      it "repeats endlessly" do
+        begins(repeat, [0] * 100)
+      end
     end
   end
 end

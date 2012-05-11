@@ -1,9 +1,10 @@
 require "itertools/version"
+require "fiber"
 
 module Itertools
   class << self
     def count(start, step = 1)
-      return Fiber.new do
+      Fiber.new do
         while true
           Fiber.yield start
           start += step
@@ -12,7 +13,7 @@ module Itertools
     end
 
     def cycle(wheel)
-      return Fiber.new do
+      Fiber.new do
         spoke = 0
         while true
           Fiber.yield wheel[spoke]
@@ -20,5 +21,16 @@ module Itertools
         end
       end
     end
+
+    def repeat element, count = -1
+      Fiber.new do
+        while count != 0
+          Fiber.yield element
+          count -= 1
+        end
+        raise StopIteration
+      end
+    end
+
   end
 end
