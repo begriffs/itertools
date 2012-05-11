@@ -3,7 +3,7 @@ require "fiber"
 
 module Itertools
   class << self
-    def count(start, step = 1)
+    def count start, step = 1
       Fiber.new do
         while true
           Fiber.yield start
@@ -12,10 +12,10 @@ module Itertools
       end
     end
 
-    def cycle(wheel)
+    def cycle wheel
       Fiber.new do
         spoke = 0
-        while true
+        loop do
           Fiber.yield wheel[spoke]
           spoke = (spoke + 1) % wheel.length
         end
