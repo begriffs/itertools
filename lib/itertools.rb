@@ -32,5 +32,17 @@ module Itertools
       end
     end
 
+    def chain *fibers
+      Fiber.new do
+        for f in fibers
+          begin
+            loop { Fiber.yield f.resume }
+          rescue StopIteration
+          end
+        end
+        raise StopIteration
+      end
+    end
+
   end
 end
