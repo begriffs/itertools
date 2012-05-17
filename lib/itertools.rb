@@ -44,5 +44,36 @@ module Itertools
       end
     end
 
+    def compress seq, mask
+      Fiber.new do
+        while true
+          s, m = seq.resume, mask.resume
+          Fiber.yield s if m == 1
+        end
+      end
+    end
+
+    def dropwhile pred, seq
+      Fiber.new do
+        while true
+          x = seq.resume
+          if !(pred.call x)
+            Fiber.yield x
+            break
+          end
+        end
+        loop { Fiber.yield seq.resume }
+      end
+    end
+
+    def filterfalse pred, seq
+      Fiber.new do
+        while true
+          s = seq.resume
+          Fiber.yield s if !pred.call s
+        end
+      end
+    end
+
   end
 end
