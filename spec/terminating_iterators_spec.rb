@@ -75,5 +75,41 @@ describe Itertools do
       end
     end
   end
+  describe "#islice" do
+    it "stops at the right place" do
+      z   = Itertools.count 0
+      seq = Itertools.islice z, 2
+      seq.should begin_with [0,1]
+      seq.should be_exhausted
+    end
+
+    it "starts and stops" do
+      z   = Itertools.count 1
+      seq = Itertools.islice z, 2, 4
+      seq.should begin_with [3,4]
+      seq.should be_exhausted
+    end
+
+    it "starts and keeps going" do
+      z   = Itertools.count 1
+      seq = Itertools.islice z, 2, nil
+      seq.should begin_with [3,4,5,6,7]
+      seq.should_not be_exhausted
+    end
+
+    it "starts and stops with step of 2" do
+      z   = Itertools.count 1
+      seq = Itertools.islice z, 2, 10, 2
+      seq.should begin_with [3,5,7,9]
+      seq.should be_exhausted
+    end
+
+    it "starts and stops with step of 7" do
+      z   = Itertools.count 1
+      seq = Itertools.islice z, 2, 40, 7
+      seq.should begin_with [3,10,17,24,31,38]
+      seq.should be_exhausted
+    end
+  end
 
 end

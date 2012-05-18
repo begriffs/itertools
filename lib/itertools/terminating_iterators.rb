@@ -40,5 +40,18 @@ module Itertools
       end
     end
 
+    def islice seq, *args
+      flip              = args.length > 1 ? 0 : 1
+      start, stop, step = args[flip] || 0, args[1-flip], args[2] || 1
+      (0...start).each { seq.resume }
+      at = start
+      forever do
+        raise StopIteration if stop and at >= stop
+        Fiber.yield seq.resume
+        (step - 1).times { seq.resume }
+        at += step
+      end
+    end
+
   end
 end
