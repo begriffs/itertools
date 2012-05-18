@@ -1,18 +1,14 @@
 require "itertools/version"
+require "itertools/helpers"
 require "itertools/infinite_iterators"
 require "itertools/terminating_iterators"
-require "fiber"
 
 module Itertools
   class << self
     include InfiniteIterators
     include TerminatingIterators
-    def forever
-      Fiber.new do
-        while true
-          yield
-        end
-      end
-    end
+
+    private
+    include Helpers
   end
 end
