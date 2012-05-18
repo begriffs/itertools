@@ -67,5 +67,13 @@ describe Itertools do
       seq  = Itertools.filterfalse pred, nat
       seq.should begin_with [0,2,4,6,8]
     end
+
+    context "empty sequence" do
+      it "does nothing" do
+        empty = Itertools.repeat 0, 0
+        (Itertools.filterfalse ->(x) {false}, empty).should be_exhausted
+      end
+    end
   end
+
 end

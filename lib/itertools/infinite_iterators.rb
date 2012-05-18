@@ -9,6 +9,7 @@ module Itertools
 
     def cycle wheel
       Fiber.new do
+        raise StopIteration if wheel.empty?
         spoke = 0
         loop do
           Fiber.yield wheel[spoke]

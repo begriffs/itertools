@@ -37,6 +37,11 @@ describe Itertools do
         subject.cycle('whool').should begin_with expected
       end
     end
+    context "with an empty array" do
+      it "yields nothing" do
+        Itertools.cycle([]).should be_exhausted
+      end
+    end
   end
 
   describe "#repeat" do
