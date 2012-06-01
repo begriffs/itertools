@@ -15,10 +15,7 @@ module Itertools
     def chain *fibers
       Fiber.new do
         for f in fibers
-          begin
-            loop { Fiber.yield f.resume }
-          rescue StopIteration
-          end
+          loop { Fiber.yield f.resume }
         end
         raise StopIteration
       end
