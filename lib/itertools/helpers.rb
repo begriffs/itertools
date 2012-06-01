@@ -8,5 +8,10 @@ module Itertools
         end
       end
     end
+    def exhausted
+      while true
+        raise StopIteration
+      end
+    end
   end
 end

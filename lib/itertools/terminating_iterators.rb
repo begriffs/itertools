@@ -4,11 +4,11 @@ module Itertools
     def iter obj
       case obj
         when Fiber;  return obj
-        when String; obj = obj.split(//)
+        when String; obj = obj.split //
       end
       Fiber.new do
         obj.each { |x| Fiber.yield x }
-        raise StopIteration
+        exhausted
       end
     end
 
@@ -17,7 +17,7 @@ module Itertools
         for f in fibers
           loop { Fiber.yield f.resume }
         end
-        raise StopIteration
+        exhausted
       end
     end
 
@@ -52,7 +52,7 @@ module Itertools
         group = forever do
           Fiber.yield curr_val
           curr_val = seq.resume
-          raise StopIteration if key.call(curr_val) != key.call(group_val)
+          exhausted if key.call(curr_val) != key.call(group_val)
         end
         Fiber.yield [group_val, group]
       end
@@ -71,7 +71,7 @@ module Itertools
       (0...start).each { seq.resume }
       at = start
       forever do
-        raise StopIteration if stop and at >= stop
+        exhausted if stop and at >= stop
         Fiber.yield seq.resume
         (step - 1).times { seq.resume }
         at += step
