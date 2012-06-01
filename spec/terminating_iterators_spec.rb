@@ -17,6 +17,12 @@ describe Itertools do
       seq.should begin_with [1,2,3,1,2,3,1,2,3,1]
       seq.should_not be_exhausted
     end
+    it "stays exhausted" do
+      seq = Itertools.iter "a"
+      seq.resume
+      seq.should be_exhausted
+      seq.should be_exhausted
+    end
   end
   describe "#chain" do
     context "given finite inputs" do
@@ -75,6 +81,36 @@ describe Itertools do
       pred = ->(x) { true }
       seq  = Itertools.dropwhile pred, data
       seq.should be_exhausted
+    end
+  end
+  describe "#groupby" do
+    context "given a ruby string" do
+      it "generates proper keys" do
+        seq = Itertools.groupby 'AAAABBBCCDAABBB'
+        seq.resume[0].should == 'A'
+        seq.resume[0].should == 'B'
+        seq.resume[0].should == 'C'
+        seq.resume[0].should == 'D'
+        seq.resume[0].should == 'A'
+        seq.resume[0].should == 'B'
+        seq.should be_exhausted
+      end
+      it "generates proper values" do
+        seq = Itertools.groupby 'AAAABBBCCD'
+        v   = seq.resume[1]
+        v.should begin_with ['A', 'A', 'A', 'A']
+        v.should be_exhausted
+        v   = seq.resume[1]
+        v.should begin_with ['B', 'B', 'B']
+        v.should be_exhausted
+        v   = seq.resume[1]
+        v.should begin_with ['C', 'C']
+        v.should be_exhausted
+        v   = seq.resume[1]
+        v.should begin_with ['D']
+        v.should be_exhausted
+        seq.should be_exhausted
+      end
     end
   end
   describe "#filterfalse" do

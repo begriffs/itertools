@@ -41,6 +41,23 @@ module Itertools
       end
     end
 
+    def groupby seq, key = ->(x){x}
+      seq = iter seq
+      curr_val = group_val = nil
+      forever do
+        while key.call(curr_val) == key.call(group_val) do
+          curr_val = seq.resume
+        end
+        group_val = curr_val
+        group = forever do
+          Fiber.yield curr_val
+          curr_val = seq.resume
+          raise StopIteration if key.call(curr_val) != key.call(group_val)
+        end
+        Fiber.yield [group_val, group]
+      end
+    end
+
     def filterfalse pred, seq
       forever do
         s = seq.resume
