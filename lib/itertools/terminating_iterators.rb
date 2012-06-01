@@ -1,6 +1,17 @@
 module Itertools
   module TerminatingIterators
 
+    def iterate obj
+      case obj
+        when Fiber;  return obj
+        when String; obj = obj.split(//)
+      end
+      Fiber.new do
+        obj.each { |x| Fiber.yield x }
+        raise StopIteration
+      end
+    end
+
     def chain *fibers
       Fiber.new do
         for f in fibers
