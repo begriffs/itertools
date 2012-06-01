@@ -1,19 +1,19 @@
 require 'itertools'
 
 describe Itertools do
-  describe "#iterate" do
+  describe "#iter" do
     it "converts strings" do
-      seq = Itertools.iterate "abcde"
+      seq = Itertools.iter "abcde"
       seq.should begin_with ['a', 'b', 'c', 'd', 'e']
       seq.should be_exhausted
     end
     it "converts arrays" do
-      seq = Itertools.iterate ['a', 'b', 'c', 'd', 'e']
+      seq = Itertools.iter ['a', 'b', 'c', 'd', 'e']
       seq.should begin_with ['a', 'b', 'c', 'd', 'e']
       seq.should be_exhausted
     end
     it "leaves iterators unchanged" do
-      seq = Itertools.iterate Itertools.cycle [1,2,3]
+      seq = Itertools.iter Itertools.cycle [1,2,3]
       seq.should begin_with [1,2,3,1,2,3,1,2,3,1]
       seq.should_not be_exhausted
     end

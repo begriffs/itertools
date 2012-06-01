@@ -1,7 +1,7 @@
 module Itertools
   module TerminatingIterators
 
-    def iterate obj
+    def iter obj
       case obj
         when Fiber;  return obj
         when String; obj = obj.split(//)
