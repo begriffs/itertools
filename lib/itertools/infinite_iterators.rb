@@ -22,7 +22,7 @@ module Itertools
       Fiber.new do
         while count != 0
           Fiber.yield element
-          count -= 1
+          count -= 1 if count > 0
         end
         raise StopIteration
       end
