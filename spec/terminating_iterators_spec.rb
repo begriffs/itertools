@@ -17,12 +17,6 @@ describe Itertools do
       seq.should begin_with [1,2,3,1,2,3,1,2,3,1]
       seq.should_not be_exhausted
     end
-    it "stays exhausted" do
-      seq = Itertools.iter "a"
-      seq.resume
-      seq.should be_exhausted
-      seq.should be_exhausted
-    end
   end
   describe "#chain" do
     context "given finite inputs" do
