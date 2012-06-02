@@ -79,5 +79,22 @@ module Itertools
       end
     end
 
+    def starmap f, seq
+      forever do
+        Fiber.yield(f.call *seq.resume)
+      end
+    end
+
+    def takewhile f, seq
+      Fiber.new do
+        x = seq.resume
+        while f.call x
+          Fiber.yield x
+          x = seq.resume
+        end
+        exhausted
+      end
+    end
+
   end
 end

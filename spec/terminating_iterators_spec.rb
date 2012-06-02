@@ -158,5 +158,18 @@ describe Itertools do
       seq.should be_exhausted
     end
   end
-
+  describe "#starmap" do
+    it "applies its argument to each element" do
+      seq = Itertools.starmap ->(x,y){x**y}, Itertools.iter([[2,5], [3,2], [10,3]])
+      seq.should begin_with [32, 9, 1000]
+      seq.should be_exhausted
+    end
+  end
+  describe "#takewhile" do
+    it "takes while condition holds" do
+      seq = Itertools.takewhile ->(x){x<5}, Itertools.iter([1,4,6,4,1])
+      seq.should begin_with [1,4]
+      seq.should be_exhausted
+    end
+  end
 end
