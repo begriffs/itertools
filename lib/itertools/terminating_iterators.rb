@@ -45,6 +45,7 @@ module Itertools
       seq = iter seq
       curr_val = group_val = nil
       forever do
+        exhausted unless seq.alive? # in case a group fiber exhuasts seq
         while key.call(curr_val) == key.call(group_val) do
           curr_val = seq.resume
         end
