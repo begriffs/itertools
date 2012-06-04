@@ -172,4 +172,31 @@ describe Itertools do
       seq.should be_exhausted
     end
   end
+  describe "#tee" do
+    context "given a terminating sequence" do
+      it "properly duplicates the sequence" do
+        seqs = Itertools.tee Itertools.iter([1,2]), 100
+        seqs.length.should == 100
+        seqs.each do |seq|
+          seq.should begin_with [1,2]
+          seq.should be_exhausted
+        end
+      end
+    end
+    context "given an infinite sequence" do
+      it "properly duplicates the sequence" do
+        seqs = Itertools.tee (Itertools.count 0), 2
+        seqs.each do |seq|
+          seq.should begin_with [0,1,2,3,4]
+          seq.should_not be_exhausted
+        end
+      end
+    end
+    context "with n=0" do
+      it "returns an empty array" do
+        seqs = Itertools.tee Itertools.count(0), 0
+        seqs.length.should == 0
+      end
+    end
+  end
 end

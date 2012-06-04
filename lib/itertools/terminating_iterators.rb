@@ -96,5 +96,20 @@ module Itertools
       end
     end
 
+    def tee seq, n=2
+      buffers = (0...n).map { [] } # [[]]*n makes shallow copies
+      buffered_seq = ->(buf) do
+        forever do
+          if buf.empty?
+            exhausted unless seq.alive? # seq previously exhausted
+            fresh = seq.resume
+            buffers.each { |b| b << fresh }
+          end
+          Fiber.yield buf.shift
+        end
+      end
+      buffers.map { |b| buffered_seq.call b }
+    end
+
   end
 end
