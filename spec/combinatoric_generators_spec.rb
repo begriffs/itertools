@@ -11,8 +11,7 @@ describe Itertools do
     end
     context "given no iterators" do
       it "gives nothing" do
-        seq = Itertools.product
-        seq.should be_exhausted
+        Itertools.product.should be_exhausted
       end
     end
   end
