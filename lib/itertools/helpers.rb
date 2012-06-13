@@ -11,5 +11,10 @@ module Itertools
     def exhausted
       raise StopIteration
     end
+    def array fiber
+      result = []
+      loop { result << fiber.resume }
+      result
+    end
   end
 end
